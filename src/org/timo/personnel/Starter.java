@@ -14,26 +14,34 @@ import org.timo.personnel.model.persistence.PersistenceUtil;
  */
 public class Starter {
 
-    public static void main(String[] args) {
-        final Home<Person> personHome = new Home<Person>(Person.class, PersistenceUtil.getEntityManager());
-        personHome.getInstance().setName("timo");
+    public Starter(){
+        Home<Person> personHome = new Home<Person>(Person.class, PersistenceUtil.getEntityManager());
+        personHome.getInstance().setFirstName("timo");
+        personHome.getInstance().setLastName("ponce");
         personHome.persist();
-        println("Persisted : " + personHome.getId());
+        println("Persisted : " + personHome.getInstance().toString());
 
         personHome.clearInstance();
-        personHome.getInstance().setName("hugo");
+        personHome.getInstance().setFirstName("hugo");
+        personHome.getInstance().setLastName("ponce");
         personHome.persist();
-        println("Persisted : " + personHome.getId());
+        println("Persisted : " + personHome.getInstance().toString());
 
         personHome.clearInstance();
-        personHome.getInstance().setName("pablo");
+        personHome.getInstance().setFirstName("pedro");
+        personHome.getInstance().setLastName("ponce");
         personHome.persist();
-        println("Persisted : " + personHome.getId());
+        println("Persisted : " + personHome.getInstance().toString());
 
         personHome.clearInstance();
         personHome.setId(1);
         personHome.find();
-        println("Found entity : " + personHome.getInstance().getName() + " , id " + personHome.getInstance().getId());
+        println("Found entity : " + personHome.getInstance().toString());
+        personHome = null;
+    }
+
+    public static void main(String[] args) {
+        new Starter();
     }
 
     private static void println(String str) {

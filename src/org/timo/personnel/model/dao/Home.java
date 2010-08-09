@@ -9,8 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 /**
- *
- * @author timoteo
+ * Generic DAO component for handling
+ * JPA entities.
+ * @param <T> Entity type
+ * @author Timoteo Ponce
  */
 public class Home<T> {
 
@@ -36,6 +38,11 @@ public class Home<T> {
         this.entityManager = entityManager;
     }
 
+    /**
+     * Returns current instance, if instance
+     * is null, it will try to create a new one.
+     * @return
+     */
     public T getInstance() {
         if (this.instance == null) {
             initInstance();
@@ -43,42 +50,82 @@ public class Home<T> {
         return this.instance;
     }
 
+    /**
+     * Sets working entity instance,
+     * you can use this to perform
+     * further operations: UPDATE,REMOVE
+     * @param instance
+     */
     public void setInstance(T instance) {
         this.instance = instance;
     }
 
+    /**
+     * Return current entity class.
+     * @return
+     */
     public Class<T> getEntityClass() {
         return entityClass;
     }
 
+    /**
+     * Returns working EntityManager
+     * @return
+     */
     public EntityManager getEntityManager() {
         return entityManager;
     }
 
+    /**
+     * Returns entity's ID, supposing
+     * that all IDs are retrieved with
+     * 'getId' operation.
+     * @return
+     */
     public Object getId() {
         return id;
     }
 
     /**
-     *
+     * Clears current instance setting
+     * all to null.
      */
     public void clearInstance() {
         setId(null);
         setInstance(null);
     }
 
+    /**
+     * Sets current entity ID, you
+     * use this before calling 'find'
+     * operation.
+     * @param id
+     */
     public void setId(Object id) {
         this.id = id;
     }
 
+    /**
+     * Verifies if entity's ID is set.
+     * @return
+     */
     public boolean isIdDefined() {
         return (this.id != null);
     }
 
+    /**
+     * Verifies if current instance is
+     * being managed by persistence
+     * context.
+     * @return
+     */
     public boolean isManaged() {
         return (getInstance() != null && getEntityManager().contains(getInstance()));
     }
 
+    /**
+     * Writes entity changes to database.
+     */
     public void update() {
         final EntityTransaction et = getEntityManager().getTransaction();
         et.begin();
@@ -86,6 +133,10 @@ public class Home<T> {
         et.commit();
     }
 
+    /**
+     * Persists current entity
+     * into database.
+     */
     public void persist() {
         final EntityTransaction et = getEntityManager().getTransaction();
         et.begin();
@@ -95,6 +146,10 @@ public class Home<T> {
         et.commit();
     }
 
+    /**
+     * Removes current instance from
+     * database.
+     */
     public void remove() {
         final EntityTransaction et = getEntityManager().getTransaction();
         et.begin();
@@ -103,6 +158,11 @@ public class Home<T> {
         et.commit();
     }
 
+    /**
+     * Looks for an entity with that
+     * matches with current ID.
+     * @return
+     */
     public T find() {
         T result = null;
         if(getEntityManager().isOpen() ){
@@ -111,6 +171,9 @@ public class Home<T> {
         return result;
     }
 
+    /**
+     *
+     */
     public void initInstance() {
         if (isIdDefined()) {
             setInstance(find());
@@ -119,6 +182,10 @@ public class Home<T> {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public T createInstance() {
         T newInstance = null;
         try {
@@ -130,7 +197,12 @@ public class Home<T> {
         return newInstance;
     }
 
-    public static Object getIdProperty(Object entity) {
+    /**
+     * 
+     * @param entity
+     * @return
+     */
+    public Object getIdProperty(Object entity) {
         Object id = null;
         try {
             final Method method = entity.getClass().getMethod("getId");

@@ -6,8 +6,9 @@ package org.timo.personnel.model.persistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
 
 /**
  *
@@ -23,6 +24,12 @@ public class PersistenceUtil {
             entityManager = managerFactory.createEntityManager();
         }
         return entityManager;
+    }
+
+    public static Criteria createCriteria(Class<?> target){
+        final Session session = (Session) getEntityManager().getDelegate();
+        final Criteria crit = session.createCriteria(target);
+        return crit;
     }
 }
 
