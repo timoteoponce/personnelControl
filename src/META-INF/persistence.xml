@@ -4,6 +4,7 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>org.timo.personnel.model.Person</class>
     <class>org.timo.personnel.model.User</class>
+    <class>org.timo.personnel.model.Role</class>
     <properties>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.format_sql" value="true"/>

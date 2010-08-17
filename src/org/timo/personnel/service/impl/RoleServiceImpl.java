@@ -53,7 +53,10 @@ public class RoleServiceImpl implements RoleService{
     public Collection<Role> listRoles(String search) {
         Session session = (Session) this.roleHome.getEntityManager().getDelegate();
         Criteria crit = session.createCriteria(Role.class);
-        crit.add(Restrictions.like("name", search));
+        
+        if(!search.isEmpty()){
+            crit.add(Restrictions.like("name", search));
+        }
         
         return crit.list();
     }
